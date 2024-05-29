@@ -14,7 +14,7 @@ const CarListItem = ({ car }: { car: CarWithDeps }) => {
               <p>{car.model.name}</p>
             </div>
           </div>
-          <div>
+          <div className="text-right">
             <p>{car.price ? `${car.price} kč` : 'by arrangement'}</p>
             <p>{car.location}</p>
           </div>

@@ -1,39 +1,63 @@
+'use client';
+
 import CarList from '@/components/CarList';
 import CarSearchForm from '@/components/CarSearchForm';
-import prisma from '@/utils/db';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
-const getCars = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+const Home = () => {
+  const [model, setModel] = useState<string>('');
+  const [brand, setBrand] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
 
-  const cars = await prisma.car.findMany({
-    include: {
-      model: true,
-      brand: true,
+  const { data: brands } = useQuery({
+    queryKey: ['brands'],
+    queryFn: async () => {
+      return (await fetch('/api/brands')).json();
     },
   });
 
-  return cars;
-};
+  const { data: models } = useQuery({
+    queryKey: ['models'],
+    queryFn: async () => {
+      return (await fetch('/api/car-models')).json();
+    },
+  });
 
-const fetchBrands = async () => {
-  const brands = await prisma.brand.findMany();
-  return brands;
-};
+  const { data: cars } = useQuery({
+    queryKey: ['cars', { location, model, brand }],
+    queryFn: async () => {
+      return (
+        await fetch(
+          `/api/cars?location=${location}&model=${model}&brand=${brand}`
+        )
+      ).json();
+    },
+    placeholderData: keepPreviousData,
+  });
 
-const fetchModels = async () => {
-  const models = await prisma.carModel.findMany();
-  return models;
-};
+  const handleSearch = async (data: {
+    location: string;
+    model: string;
+    brand: string;
+  }) => {
+    setLocation(data.location);
+    setModel(data.model);
+    setBrand(data.brand);
+  };
 
-const Home = async () => {
-  const cars = await getCars();
-  const brands = await fetchBrands();
-  const models = await fetchModels();
+  if (!brands || !models || !cars) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <CarSearchForm models={models} brands={brands} />
-      <CarList cars={cars} />
+      <CarSearchForm
+        models={models.data}
+        brands={brands.data}
+        onSearch={handleSearch}
+      />
+      <CarList cars={cars.data} />
     </>
   );
 };

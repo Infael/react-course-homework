@@ -19,6 +19,8 @@ export const createCar = async (formData: FormData) => {
       modelId: modelId,
       brandId: brandId,
       description: description,
+      price: parseInt(price),
+      location: location,
     },
   });
 

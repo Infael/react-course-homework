@@ -37,7 +37,7 @@ const NewCarForm = ({
         <TextInput label="Price" type="number" name="price" required />
 
         <button type="submit" className="btn">
-          submit
+          Create
         </button>
       </form>
     </Card>
