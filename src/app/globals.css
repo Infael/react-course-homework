@@ -12,7 +12,7 @@
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background-end-rgb: 40, 40, 40;
   }
 }
 
@@ -24,10 +24,20 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  min-height: 100vh;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+@layer components {
+  .form-field {
+    @apply rounded-md border border-gray-400 px-3 py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0;
+  }
+  .btn {
+    @apply rounded-md bg-gray-200 px-3.5 py-2.5 text-sm font-semibold text-pink-600 shadow-sm hover:bg-gray-300;
   }
 }
