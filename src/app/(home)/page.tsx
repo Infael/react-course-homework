@@ -15,6 +15,7 @@ const Home = () => {
     queryFn: async () => {
       return (await fetch('/api/brands')).json();
     },
+    throwOnError: true,
   });
 
   const { data: models } = useQuery({
@@ -22,9 +23,10 @@ const Home = () => {
     queryFn: async () => {
       return (await fetch('/api/car-models')).json();
     },
+    throwOnError: true,
   });
 
-  const { data: cars } = useQuery({
+  const { data: cars, isFetching: isCarsFetching } = useQuery({
     queryKey: ['cars', { location, model, brand }],
     queryFn: async () => {
       return (
@@ -34,6 +36,7 @@ const Home = () => {
       ).json();
     },
     placeholderData: keepPreviousData,
+    throwOnError: true,
   });
 
   const handleSearch = async (data: {
@@ -57,7 +60,10 @@ const Home = () => {
         brands={brands.data}
         onSearch={handleSearch}
       />
-      <CarList cars={cars.data} />
+      {isCarsFetching && (
+        <div className="flex justify-center pt-4">Loading cars...</div>
+      )}
+      {!isCarsFetching && <CarList cars={cars.data} />}
     </>
   );
 };

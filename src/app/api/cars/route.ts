@@ -3,6 +3,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { URL } from 'url';
 
 export const GET = async (request: NextRequest) => {
+  // for testing purposes await for 2 seconds
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  // for testing purposes return an error
+  // return NextResponse.error();
+
   const url = new URL(request.nextUrl.href);
   const params = url.searchParams;
 

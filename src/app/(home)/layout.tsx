@@ -1,5 +1,6 @@
 'use client';
 
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
@@ -16,6 +17,8 @@ export default function SearchLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </ErrorBoundary>
   );
 }
